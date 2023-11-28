@@ -1,40 +1,41 @@
 import './App.css'
 
 function App() {
-  interface Model {
-    payment: number,
-    sex: number,
-    age: number,
-    speciality: number,
-    foreigner: number,
-    type: number
-  }
-
-  const model = () => {
-    return 
+  const model = (params: Array<number>) => {
+    return 0.94 +
+           0.147268528 * params[0] -
+           0.073886811 * params[1] -
+           0.004022699 * params[2] -
+           0.008932713 * params[3] +
+           0.052367313 * params[4] -
+           0.115455552 * params[5]
   }
 
   const handleExpell = (event: React.ChangeEvent<HTMLFormElement>) => {
     event.preventDefault()
-
     const data = new FormData(event.target)
-
-    for (const pair of data.entries()) {
-      console.log(pair[0], pair[1])
+    let numbers: Array<number> = []
+    for (let value of data.entries()) {
+      numbers.push(Number(value[1]))
     }
-  }
+    
+    let result = model(numbers)
+    result = result > 1 ? 1 : result 
+    result = (1 - result) * 100
 
+    alert('Вероятность отчисления: ' + result.toFixed(0) + '%')
+  }
   return (
     <div className="wrapper">
-      <h1>Отчислен?</h1>
+      <h1>🧑‍🎓Отчислен?</h1>
       <p>На этом сайте ты можешь заполнить небольшую информацию о себе и узнать, с какой вероятностью тебя могут отчислить из Московского Политеха!</p>
       <form className="form-wrapper" onSubmit={handleExpell}>
         <div className='form-item'>
-          Ты стипендиат?
+          1. Ты стипендиат? 💰
           <div>
             <label htmlFor="p-y">
               Да
-              <input required type="radio" name="payment" value='1' id="p-y" checked readOnly />
+              <input required type="radio" name="payment" value='1' id="p-y"   />
             </label>
             <label htmlFor="p-n">
               Нет
@@ -43,11 +44,11 @@ function App() {
           </div>
         </div>
         <div className='form-item'>
-          Какой у тебя пол?
+          2. Какой у тебя пол? 👫
           <div>
             <label htmlFor="s-m">
               Мужской
-              <input required type="radio" name="sex" value='1' id="s-m" checked readOnly />
+              <input required type="radio" name="sex" value='1' id="s-m"   />
             </label>
             <label htmlFor="s-f">
               Женский
@@ -56,13 +57,13 @@ function App() {
           </div>
         </div>
         <div className='form-item'>
-          Сколько тебе лет?
+          3. Сколько тебе лет? 👶
           <div>
-            <input required type="number" name="age" id="age" min="1" max="100" value="18" readOnly />
+            <input required type="number" name="age" id="age" min="1" max="100" />
           </div>
         </div>
         <div className='form-item'>
-          Какой у тебя факультет?
+          4. Какой у тебя факультет? 📚
           <div>
             <select name="speciality" id="speciality">
               <option value="12">Факультет информационных технологий</option>
@@ -80,7 +81,7 @@ function App() {
           </div>
         </div>
         <div className='form-item'>
-          Ты иностранец?
+          5. Ты иностранец? 🧕🏻
           <div>
             <label htmlFor="f-y">
               Да
@@ -88,16 +89,16 @@ function App() {
             </label>
             <label htmlFor="f-n">
               Нет
-              <input required type="radio" name="foreigner" value='0' id="f-n" checked readOnly />
+              <input required type="radio" name="foreigner" value='0' id="f-n"   />
             </label>
           </div>
         </div>
         <div className='form-item'>
-          На какую форму обучения ты поступаешь?
+          6. На какую форму обучения ты поступаешь? 🌔
           <div>
             <label htmlFor="day">
               Дневная
-              <input required type="radio" name="type" value='1' id="day" checked readOnly />
+              <input required type="radio" name="type" value='1' id="day"   />
             </label>
             <label htmlFor="eve">
               Вечерняя
@@ -105,9 +106,7 @@ function App() {
             </label>
           </div>
         </div>
-        <div className='form-item'>
-          <button>Рассчитать!</button>
-        </div>
+        <button>Рассчитать!</button><br />
       </form>
     </div>
   )
